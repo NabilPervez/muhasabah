@@ -1,0 +1,25 @@
+{
+  "name": "Digital Islamic Bullet Journal",
+  "short_name": "Islamic BuJo",
+  "description": "A digital bullet journal with Islamic spiritual reflection",
+  "theme_color": "#2D7D32",
+  "background_color": "#FFFFFF",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png", 
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
