@@ -26,33 +26,38 @@ export function useEntries(currentDate: Date, storageReady: boolean) {
       // Get all incomplete daily log entries from all dates
       const allIncompleteEntries = await storageManager.getAllIncompleteEntriesByType(['task', 'note', 'event']);
       
-      // Find overdue entries (from previous days)
-      const overdueEntries = allIncompleteEntries.filter(entry => entry.date !== dateString);
-      
-      // Create new entries for current date from overdue entries
+      const todayString = format(new Date(), 'yyyy-MM-dd');
       const newCarriedOverEntries: JournalEntry[] = [];
-      for (const overdueEntry of overdueEntries) {
-        // Create new entry for current date
-        const newCarriedOverEntry: JournalEntry = {
-          id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-          date: dateString,
-          content: overdueEntry.content,
-          type: overdueEntry.type,
-          status: 'incomplete',
-          createdAt: new Date(),
-          originalDate: overdueEntry.date
-        };
+
+      // Only migrate overdue entries if we are viewing the current actual day
+      if (dateString === todayString) {
+        // Find overdue entries (strictly from previous days)
+        const overdueEntries = allIncompleteEntries.filter(entry => entry.date < todayString);
         
-        // Save new entry
-        await storageManager.saveEntry(newCarriedOverEntry);
-        newCarriedOverEntries.push(newCarriedOverEntry);
-        
-        // Mark original entry as migrated
-        await storageManager.saveEntry({
-          ...overdueEntry,
-          status: 'migrated',
-          migratedTo: dateString
-        });
+        // Create new entries for current date from overdue entries
+        for (const overdueEntry of overdueEntries) {
+          // Create new entry for current date
+          const newCarriedOverEntry: JournalEntry = {
+            id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            date: dateString,
+            content: overdueEntry.content,
+            type: overdueEntry.type,
+            status: 'incomplete',
+            createdAt: new Date(),
+            originalDate: overdueEntry.date
+          };
+          
+          // Save new entry
+          await storageManager.saveEntry(newCarriedOverEntry);
+          newCarriedOverEntries.push(newCarriedOverEntry);
+          
+          // Mark original entry as migrated
+          await storageManager.saveEntry({
+            ...overdueEntry,
+            status: 'migrated',
+            migratedTo: dateString
+          });
+        }
       }
       
       const allCarryOverEntries = [...allGoals, ...allImportant, ...allHabits];
