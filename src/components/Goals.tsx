@@ -20,7 +20,7 @@ export function Goals({ goals, onUpdateGoal, onDeleteGoal }: GoalsProps) {
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border-2 border-gray-100 overflow-hidden">
-      <div className="px-6 py-4 bg-gradient-to-r from-emerald-50 to-blue-50 border-b border-gray-100">
+      <div className="px-6 py-4 bg-gradient-to-r from-emerald-50 to-white/80 border-b border-gray-100">
         <div className="flex items-center space-x-2">
           <Star className="w-5 h-5 text-emerald-600" />
           <h2 className="text-lg font-semibold text-gray-900">Goals Checklist</h2>
@@ -36,8 +36,8 @@ export function Goals({ goals, onUpdateGoal, onDeleteGoal }: GoalsProps) {
             <div
               key={goal.id}
               className={`flex items-start space-x-3 p-3 rounded-xl border-2 transition-colors ${goal.status === 'complete'
-                  ? 'bg-emerald-50 border-emerald-100'
-                  : 'bg-white border-gray-100 hover:border-emerald-200'
+                ? 'bg-emerald-50/50 border-emerald-100'
+                : 'bg-white border-gray-100 hover:border-emerald-200'
                 }`}
             >
               <button
@@ -53,8 +53,8 @@ export function Goals({ goals, onUpdateGoal, onDeleteGoal }: GoalsProps) {
 
               <div className="flex-1 min-w-0">
                 <p className={`text-sm ${goal.status === 'complete'
-                    ? 'text-gray-500 dark:text-gray-400 line-through'
-                    : 'text-gray-900 dark:text-white'
+                  ? 'text-gray-500 dark:text-gray-400 line-through'
+                  : 'text-gray-900 dark:text-white'
                   }`}>
                   {goal.content}
                 </p>

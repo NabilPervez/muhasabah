@@ -93,7 +93,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-blue-50 dark:bg-gray-900 transition-colors">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-emerald-100 dark:bg-gray-900 transition-colors">
       <Header
         currentDate={currentDate}
         onDateChange={setCurrentDate}

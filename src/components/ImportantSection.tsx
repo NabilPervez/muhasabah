@@ -19,8 +19,8 @@ export function ImportantSection({ importantEntries, onUpdateEntry, onDeleteEntr
   }
 
   return (
-    <div className="bg-gradient-to-br from-red-50 to-red-50 dark:from-red-900/20 dark:to-red-900/20 rounded-xl shadow-sm border border-red-200 dark:border-red-800 overflow-hidden">
-      <div className="px-6 py-4 bg-gradient-to-r from-red-100 to-red-100 dark:from-red-900/30 dark:to-red-900/30 border-b border-red-200 dark:border-red-700">
+    <div className="bg-gradient-to-br from-red-50 to-white dark:from-red-900/20 dark:to-red-900/10 rounded-xl shadow-sm border border-red-100 dark:border-red-800 overflow-hidden">
+      <div className="px-6 py-4 bg-gradient-to-r from-red-50/50 to-transparent dark:from-red-900/30 dark:to-transparent border-b border-red-100 dark:border-red-700">
         <div className="flex items-center space-x-2">
           <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Important Tasks</h2>
@@ -35,11 +35,10 @@ export function ImportantSection({ importantEntries, onUpdateEntry, onDeleteEntr
           {importantEntries.map((entry) => (
             <div
               key={entry.id}
-              className={`flex items-start space-x-3 p-3 rounded-lg border transition-colors ${
-                entry.status === 'complete'
+              className={`flex items-start space-x-3 p-3 rounded-lg border transition-colors ${entry.status === 'complete'
                   ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
                   : 'bg-white dark:bg-gray-700 border-red-200 dark:border-red-600'
-              }`}
+                }`}
             >
               <button
                 onClick={() => toggleEntryComplete(entry)}
@@ -53,11 +52,10 @@ export function ImportantSection({ importantEntries, onUpdateEntry, onDeleteEntr
               </button>
 
               <div className="flex-1 min-w-0">
-                <p className={`text-sm ${
-                  entry.status === 'complete'
+                <p className={`text-sm ${entry.status === 'complete'
                     ? 'text-gray-500 dark:text-gray-400 line-through'
                     : 'text-gray-900 dark:text-white'
-                }`}>
+                  }`}>
                   {entry.content}
                 </p>
               </div>

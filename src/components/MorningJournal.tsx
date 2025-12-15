@@ -36,8 +36,8 @@ export function MorningJournal({ entries, onAddEntry, onUpdateEntry, onDeleteEnt
   const hasEntry = morningEntries.length > 0;
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-blue-50 dark:from-blue-900/20 dark:to-blue-900/20 rounded-xl shadow-sm border border-blue-200 dark:border-blue-800 overflow-hidden">
-      <div className="px-6 py-4 bg-gradient-to-r from-blue-100 to-blue-100 dark:from-blue-900/30 dark:to-blue-900/30 border-b border-blue-200 dark:border-blue-700">
+    <div className="bg-gradient-to-br from-sky-50 to-white dark:from-sky-900/20 dark:to-sky-900/10 rounded-xl shadow-sm border border-sky-100 dark:border-sky-800 overflow-hidden">
+      <div className="px-6 py-4 bg-gradient-to-r from-sky-50/50 to-transparent dark:from-sky-900/30 dark:to-transparent border-b border-sky-100 dark:border-sky-700">
         <div className="flex items-center space-x-2">
           <Sunrise className="w-5 h-5 text-blue-600 dark:text-blue-400" />
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Morning Journal</h2>
@@ -70,12 +70,12 @@ export function MorningJournal({ entries, onAddEntry, onUpdateEntry, onDeleteEnt
               placeholder="What's on your mind? What is one win from yesterday?"
               className="w-full h-32 px-4 py-3 border border-blue-300 dark:border-blue-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none dark:bg-gray-700 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
             />
-            
+
             <div className="flex justify-between items-center">
               <div className="text-xs text-blue-600 dark:text-blue-400">
                 <p>Start your day with reflection</p>
               </div>
-              
+
               <div className="flex space-x-2">
                 {isExpanded && hasEntry && (
                   <button

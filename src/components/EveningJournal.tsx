@@ -36,8 +36,8 @@ export function EveningJournal({ entries, onAddEntry, onUpdateEntry, onDeleteEnt
   const hasEntry = eveningEntries.length > 0;
 
   return (
-    <div className="bg-gradient-to-br from-purple-50 to-purple-50 dark:from-purple-900/20 dark:to-purple-900/20 rounded-xl shadow-sm border border-purple-200 dark:border-purple-800 overflow-hidden">
-      <div className="px-6 py-4 bg-gradient-to-r from-purple-100 to-purple-100 dark:from-purple-900/30 dark:to-purple-900/30 border-b border-purple-200 dark:border-purple-700">
+    <div className="bg-gradient-to-br from-indigo-50 to-white dark:from-indigo-900/20 dark:to-indigo-900/10 rounded-xl shadow-sm border border-indigo-100 dark:border-indigo-800 overflow-hidden">
+      <div className="px-6 py-4 bg-gradient-to-r from-indigo-50/50 to-transparent dark:from-indigo-900/30 dark:to-transparent border-b border-indigo-100 dark:border-indigo-700">
         <div className="flex items-center space-x-2">
           <Moon className="w-5 h-5 text-purple-600 dark:text-purple-400" />
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Evening Journal</h2>
@@ -70,12 +70,12 @@ export function EveningJournal({ entries, onAddEntry, onUpdateEntry, onDeleteEnt
               placeholder="What's on your mind? What did you learn today?"
               className="w-full h-32 px-4 py-3 border border-purple-300 dark:border-purple-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none dark:bg-gray-700 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
             />
-            
+
             <div className="flex justify-between items-center">
               <div className="text-xs text-purple-600 dark:text-purple-400">
                 <p>Reflect on your day's learnings</p>
               </div>
-              
+
               <div className="flex space-x-2">
                 {isExpanded && hasEntry && (
                   <button

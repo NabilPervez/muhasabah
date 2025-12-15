@@ -19,8 +19,8 @@ export function HabitTracker({ habitEntries, onUpdateEntry, onDeleteEntry }: Hab
   }
 
   return (
-    <div className="bg-gradient-to-br from-green-50 to-green-50 dark:from-green-900/20 dark:to-green-900/20 rounded-xl shadow-sm border border-green-200 dark:border-green-800 overflow-hidden">
-      <div className="px-6 py-4 bg-gradient-to-r from-green-100 to-green-100 dark:from-green-900/30 dark:to-green-900/30 border-b border-green-200 dark:border-green-700">
+    <div className="bg-gradient-to-br from-emerald-50 to-white dark:from-emerald-900/20 dark:to-emerald-900/10 rounded-xl shadow-sm border border-emerald-100 dark:border-emerald-800 overflow-hidden">
+      <div className="px-6 py-4 bg-gradient-to-r from-emerald-50/50 to-transparent dark:from-emerald-900/30 dark:to-transparent border-b border-emerald-100 dark:border-emerald-700">
         <div className="flex items-center space-x-2">
           <RotateCcw className="w-5 h-5 text-green-600 dark:text-green-400" />
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Habit Tracker</h2>
@@ -35,11 +35,10 @@ export function HabitTracker({ habitEntries, onUpdateEntry, onDeleteEntry }: Hab
           {habitEntries.map((entry) => (
             <div
               key={entry.id}
-              className={`flex items-start space-x-3 p-3 rounded-lg border transition-colors ${
-                entry.status === 'complete'
+              className={`flex items-start space-x-3 p-3 rounded-lg border transition-colors ${entry.status === 'complete'
                   ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
                   : 'bg-white dark:bg-gray-700 border-green-200 dark:border-green-600'
-              }`}
+                }`}
             >
               <button
                 onClick={() => toggleEntryComplete(entry)}
@@ -53,11 +52,10 @@ export function HabitTracker({ habitEntries, onUpdateEntry, onDeleteEntry }: Hab
               </button>
 
               <div className="flex-1 min-w-0">
-                <p className={`text-sm ${
-                  entry.status === 'complete'
+                <p className={`text-sm ${entry.status === 'complete'
                     ? 'text-gray-500 dark:text-gray-400 line-through'
                     : 'text-gray-900 dark:text-white'
-                }`}>
+                  }`}>
                   {entry.content}
                 </p>
               </div>

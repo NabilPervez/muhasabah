@@ -37,8 +37,8 @@ export function GratitudeSection({ entries, onAddEntry, onUpdateEntry, onDeleteE
 
 
   return (
-    <div className="bg-gradient-to-br from-pink-50 to-pink-50 dark:from-pink-900/20 dark:to-pink-900/20 rounded-xl shadow-sm border border-pink-200 dark:border-pink-800 overflow-hidden">
-      <div className="px-6 py-4 bg-gradient-to-r from-pink-100 to-pink-100 dark:from-pink-900/30 dark:to-pink-900/30 border-b border-pink-200 dark:border-pink-700">
+    <div className="bg-gradient-to-br from-rose-50 to-white dark:from-rose-900/20 dark:to-rose-900/10 rounded-xl shadow-sm border border-rose-100 dark:border-rose-800 overflow-hidden">
+      <div className="px-6 py-4 bg-gradient-to-r from-rose-50/50 to-transparent dark:from-rose-900/30 dark:to-transparent border-b border-rose-100 dark:border-rose-700">
         <div className="flex items-center space-x-2">
           <Heart className="w-5 h-5 text-pink-600 dark:text-pink-400" />
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Gratitude Reflection</h2>
@@ -71,12 +71,12 @@ export function GratitudeSection({ entries, onAddEntry, onUpdateEntry, onDeleteE
               placeholder="I am grateful for..."
               className="w-full h-32 px-4 py-3 border border-pink-300 dark:border-pink-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent resize-none dark:bg-gray-700 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
             />
-            
+
             <div className="flex justify-between items-center">
               <div className="text-xs text-pink-600 dark:text-pink-400">
                 <p>Reflect on the blessings in your life</p>
               </div>
-              
+
               <div className="flex space-x-2">
                 {isExpanded && hasGratitude && (
                   <button

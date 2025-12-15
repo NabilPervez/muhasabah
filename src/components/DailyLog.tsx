@@ -85,7 +85,7 @@ export function DailyLog({ dailyEntries, onAddEntry, onUpdateEntry, onDeleteEntr
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border-2 border-gray-100 overflow-hidden">
-      <div className="px-6 py-4 bg-gradient-to-r from-emerald-50 to-blue-50 border-b border-gray-100">
+      <div className="px-6 py-4 bg-gradient-to-r from-emerald-50 to-white/80 border-b border-gray-100">
         <h2 className="text-lg font-semibold text-gray-900">Daily Log</h2>
         <p className="text-sm text-gray-600 mt-1">Track your tasks, events, and notes</p>
       </div>
@@ -106,8 +106,8 @@ export function DailyLog({ dailyEntries, onAddEntry, onUpdateEntry, onDeleteEntr
                 type="button"
                 onClick={() => setSelectedType(type)}
                 className={`flex items-center space-x-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors border ${selectedType === type
-                    ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
-                    : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
+                  ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                  : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
                   }`}
               >
                 <Icon className="w-4 h-4" />
@@ -127,7 +127,7 @@ export function DailyLog({ dailyEntries, onAddEntry, onUpdateEntry, onDeleteEntr
             <button
               type="submit"
               disabled={!newEntry.trim()}
-              className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-blue-600 text-white rounded-xl hover:from-emerald-600 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] active:scale-[0.98] flex items-center space-x-1 shadow-sm"
+              className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:from-emerald-600 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] active:scale-[0.98] flex items-center space-x-1 shadow-sm"
             >
               <Plus className="w-4 h-4" />
               <span>Add</span>
@@ -145,12 +145,12 @@ export function DailyLog({ dailyEntries, onAddEntry, onUpdateEntry, onDeleteEntr
               <div
                 key={entry.id}
                 className={`flex items-start space-x-3 p-3 rounded-xl border-2 transition-colors ${entry.originalDate
-                    ? 'bg-red-50 border-red-100'
-                    : entry.status === 'complete'
-                      ? 'bg-emerald-50 border-emerald-100'
-                      : entry.status === 'migrated'
-                        ? 'bg-amber-50 border-amber-100'
-                        : 'bg-white border-gray-100 hover:border-emerald-200'
+                  ? 'bg-red-50 border-red-100'
+                  : entry.status === 'complete'
+                    ? 'bg-emerald-50 border-emerald-100'
+                    : entry.status === 'migrated'
+                      ? 'bg-amber-50 border-amber-100'
+                      : 'bg-white border-gray-100 hover:border-emerald-200'
                   }`}
               >
                 <button
@@ -168,12 +168,12 @@ export function DailyLog({ dailyEntries, onAddEntry, onUpdateEntry, onDeleteEntr
                     </span>
                   )}
                   <p className={`text-sm ${entry.status === 'complete'
-                      ? 'text-gray-500 dark:text-gray-400 line-through'
-                      : entry.status === 'migrated'
-                        ? 'text-amber-700 dark:text-amber-300'
-                        : entry.originalDate
-                          ? 'text-red-900 dark:text-red-100'
-                          : 'text-gray-900 dark:text-white'
+                    ? 'text-gray-500 dark:text-gray-400 line-through'
+                    : entry.status === 'migrated'
+                      ? 'text-amber-700 dark:text-amber-300'
+                      : entry.originalDate
+                        ? 'text-red-900 dark:text-red-100'
+                        : 'text-gray-900 dark:text-white'
                     }`}>
                     {entry.content}
                   </p>
