@@ -5,5 +5,12 @@
 @layer base {
   html {
     font-family: 'Outfit', sans-serif;
+    height: 100%;
+    overscroll-behavior-y: none;
+  }
+
+  body {
+    height: 100%;
+    overscroll-behavior-y: none;
   }
 }

@@ -1,9 +1,8 @@
 const CACHE_NAME = 'islamic-bujo-v1';
 const urlsToCache = [
-  '/',
-  '/static/js/bundle.js',
-  '/static/css/main.css',
-  '/manifest.json'
+  './',
+  './index.html',
+  './manifest.json'
 ];
 
 self.addEventListener('install', (event) => {
@@ -22,6 +21,6 @@ self.addEventListener('fetch', (event) => {
         }
         return fetch(event.request);
       }
-    )
+      )
   );
 });
