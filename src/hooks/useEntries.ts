@@ -15,66 +15,83 @@ export function useEntries(currentDate: Date, storageReady: boolean) {
       setLoading(false);
       return;
     }
-    
-    try {
-      setLoading(true);
-      const dateEntries = await storageManager.getEntriesByDate(dateString);
-      const allGoals = await storageManager.getAllIncompleteGoals();
-      const allImportant = await storageManager.getAllIncompleteImportant();
-      const allHabits = await storageManager.getAllIncompleteHabits();
-      
-      // Get all incomplete daily log entries from all dates
-      const allIncompleteEntries = await storageManager.getAllIncompleteEntriesByType(['task', 'note', 'event']);
-      
-      const todayString = format(new Date(), 'yyyy-MM-dd');
-      const newCarriedOverEntries: JournalEntry[] = [];
 
-      // Only migrate overdue entries if we are viewing the current actual day
-      if (dateString === todayString) {
-        // Find overdue entries (strictly from previous days)
-        const overdueEntries = allIncompleteEntries.filter(entry => entry.date < todayString);
-        
-        // Create new entries for current date from overdue entries
-        for (const overdueEntry of overdueEntries) {
-          // Create new entry for current date
-          const newCarriedOverEntry: JournalEntry = {
-            id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-            date: dateString,
-            content: overdueEntry.content,
-            type: overdueEntry.type,
-            status: 'incomplete',
-            createdAt: new Date(),
-            originalDate: overdueEntry.date
-          };
-          
-          // Save new entry
-          await storageManager.saveEntry(newCarriedOverEntry);
-          newCarriedOverEntries.push(newCarriedOverEntry);
-          
-          // Mark original entry as migrated
-          await storageManager.saveEntry({
-            ...overdueEntry,
-            status: 'migrated',
-            migratedTo: dateString
-          });
+    // Defer execution to allow UI to paint first
+    setTimeout(async () => {
+      try {
+        console.log('[Performance] Starting data load', new Date().toISOString());
+        const start = performance.now();
+
+        setLoading(true);
+        const dateEntries = await storageManager.getEntriesByDate(dateString);
+        console.log('[Performance] Fetched date entries', performance.now() - start, 'ms');
+
+        const allGoals = await storageManager.getAllIncompleteGoals();
+        console.log('[Performance] Fetched goals', performance.now() - start, 'ms');
+
+        const allImportant = await storageManager.getAllIncompleteImportant();
+        console.log('[Performance] Fetched important', performance.now() - start, 'ms');
+
+        const allHabits = await storageManager.getAllIncompleteHabits();
+        console.log('[Performance] Fetched habits', performance.now() - start, 'ms');
+
+        // Get all incomplete daily log entries from all dates
+        const allIncompleteTasksStart = performance.now();
+        const allIncompleteEntries = await storageManager.getAllIncompleteEntriesByType(['task', 'note', 'event']);
+        console.log('[Performance] Fetched all incomplete entries', performance.now() - allIncompleteTasksStart, 'ms');
+
+        const todayString = format(new Date(), 'yyyy-MM-dd');
+        const newCarriedOverEntries: JournalEntry[] = [];
+
+        // Only migrate overdue entries if we are viewing the current actual day
+        if (dateString === todayString) {
+          // Find overdue entries (strictly from previous days)
+          const overdueEntries = allIncompleteEntries.filter(entry => entry.date < todayString);
+
+          // Create new entries for current date from overdue entries
+          for (const overdueEntry of overdueEntries) {
+            // Create new entry for current date
+            const newCarriedOverEntry: JournalEntry = {
+              id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+              date: dateString,
+              content: overdueEntry.content,
+              type: overdueEntry.type,
+              status: 'incomplete',
+              createdAt: new Date(),
+              originalDate: overdueEntry.date
+            };
+
+            // Save new entry
+            await storageManager.saveEntry(newCarriedOverEntry);
+            newCarriedOverEntries.push(newCarriedOverEntry);
+
+            // Mark original entry as migrated
+            await storageManager.saveEntry({
+              ...overdueEntry,
+              status: 'migrated',
+              migratedTo: dateString
+            });
+          }
         }
+
+        const allCarryOverEntries = [...allGoals, ...allImportant, ...allHabits];
+
+        // Combine current day entries with carried over entries
+        const combinedDailyEntries = [...dateEntries, ...newCarriedOverEntries];
+
+        // Filter out migrated entries from daily view
+        const activeDailyEntries = combinedDailyEntries.filter(entry => entry.status !== 'migrated');
+
+        setDailyEntries(activeDailyEntries.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()));
+        setCarryOverEntries(allCarryOverEntries.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()));
+
+        console.log('[Performance] Data load complete', performance.now() - start, 'ms');
+      } catch (error) {
+        console.error('Error loading entries:', error);
+      } finally {
+        setLoading(false);
       }
-      
-      const allCarryOverEntries = [...allGoals, ...allImportant, ...allHabits];
-      
-      // Combine current day entries with carried over entries
-      const combinedDailyEntries = [...dateEntries, ...newCarriedOverEntries];
-      
-      // Filter out migrated entries from daily view
-      const activeDailyEntries = combinedDailyEntries.filter(entry => entry.status !== 'migrated');
-      
-      setDailyEntries(activeDailyEntries.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()));
-      setCarryOverEntries(allCarryOverEntries.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()));
-    } catch (error) {
-      console.error('Error loading entries:', error);
-    } finally {
-      setLoading(false);
-    }
+    }, 100);
   }, [dateString, storageReady]);
 
   useEffect(() => {
@@ -107,14 +124,14 @@ export function useEntries(currentDate: Date, storageReady: boolean) {
     const dailyEntry = dailyEntries.find(e => e.id === id);
     const carryOverEntry = carryOverEntries.find(e => e.id === id);
     const entry = dailyEntry || carryOverEntry;
-    
+
     if (!entry) return;
 
     const updatedEntry = { ...entry, ...updates };
 
     try {
       await storageManager.saveEntry(updatedEntry);
-      
+
       if (entry.type === 'goal' || entry.type === 'important' || entry.type === 'habit') {
         if (updatedEntry.status === 'complete') {
           // Remove completed entry from carry-over list
@@ -145,7 +162,7 @@ export function useEntries(currentDate: Date, storageReady: boolean) {
     if (!entry || entry.type !== 'task') return;
 
     const targetDateString = format(targetDate, 'yyyy-MM-dd');
-    
+
     // Mark original as migrated
     await updateEntry(id, { status: 'migrated', migratedTo: targetDateString });
 
@@ -162,7 +179,7 @@ export function useEntries(currentDate: Date, storageReady: boolean) {
 
     try {
       await storageManager.saveEntry(migratedEntry);
-      
+
       // If migrating to current date, add to dailyEntries immediately
       if (targetDateString === dateString) {
         setDailyEntries(prev => [...prev, migratedEntry]);

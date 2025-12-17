@@ -53,8 +53,17 @@ class StorageManager {
   }
 
   private decrypt(encryptedData: string): string {
-    const bytes = CryptoJS.AES.decrypt(encryptedData, ENCRYPTION_KEY);
-    return bytes.toString(CryptoJS.enc.Utf8);
+    const start = performance.now();
+    try {
+      const bytes = CryptoJS.AES.decrypt(encryptedData, ENCRYPTION_KEY);
+      const result = bytes.toString(CryptoJS.enc.Utf8);
+      return result;
+    } catch (e) {
+      console.error("Decryption error", e);
+      return "";
+    } finally {
+      // console.log("Decryption took", performance.now() - start); // Commented out to avoid spamming console, enable if deep profiling needed
+    }
   }
 
   async saveEntry(entry: JournalEntry): Promise<void> {
