@@ -22,7 +22,7 @@ class StorageManager {
 
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;
-        
+
         if (!db.objectStoreNames.contains(ENTRIES_STORE)) {
           const entriesStore = db.createObjectStore(ENTRIES_STORE, { keyPath: 'id' });
           entriesStore.createIndex('date', 'date', { unique: false });
@@ -161,20 +161,33 @@ class StorageManager {
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction([ENTRIES_STORE], 'readonly');
       const store = transaction.objectStore(ENTRIES_STORE);
-      const request = store.getAll();
+      const index = store.index('type_status');
 
-      request.onerror = () => reject(request.error);
-      request.onsuccess = () => {
-        const allEntries = request.result;
-        const filteredEntries = allEntries.filter(entry => 
-          types.includes(entry.type) && entry.status === 'incomplete'
-        );
-        const decryptedEntries = filteredEntries.map(entry => ({
-          ...entry,
-          content: this.decrypt(entry.content)
-        }));
-        resolve(decryptedEntries);
-      };
+      const promises = types.map(type => {
+        return new Promise<JournalEntry[]>((resolveType, rejectType) => {
+          const request = index.getAll([type, 'incomplete']);
+
+          request.onerror = () => rejectType(request.error);
+          request.onsuccess = () => {
+            resolveType(request.result);
+          };
+        });
+      });
+
+      Promise.all(promises)
+        .then(results => {
+          // Flatten results
+          const allEntries = results.flat();
+
+          // Decrypt
+          const decryptedEntries = allEntries.map(entry => ({
+            ...entry,
+            content: this.decrypt(entry.content)
+          }));
+
+          resolve(decryptedEntries);
+        })
+        .catch(error => reject(error));
     });
   }
 

@@ -59,23 +59,16 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // Apply theme to document
-    if (settings.theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [settings.theme]);
-
-  const handleThemeToggle = () => {
-    const newTheme = settings.theme === 'light' ? 'dark' : 'light';
-    setSettings({ ...settings, theme: newTheme });
-  };
+    // Force light mode theme class removal
+    document.documentElement.classList.remove('dark');
+  }, []);
 
   const handleSettingsChange = async (newSettings: AppSettings) => {
-    setSettings(newSettings);
+    // Ensure theme stays light
+    const fixedSettings = { ...newSettings, theme: 'light' as const };
+    setSettings(fixedSettings);
     try {
-      await storageManager.saveSettings(newSettings);
+      await storageManager.saveSettings(fixedSettings);
     } catch (error) {
       console.error('Failed to save settings:', error);
     }
@@ -83,23 +76,23 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-300">Loading your journal...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading your journal...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-emerald-100 dark:bg-gray-900 transition-colors">
+    <div className="min-h-screen bg-slate-50 transition-colors pb-12">
       <Header
         currentDate={currentDate}
         onDateChange={setCurrentDate}
         onSettingsClick={() => setShowSettings(true)}
-        theme={settings.theme}
-        onThemeToggle={handleThemeToggle}
+        theme={'light'}
+        onThemeToggle={() => { }}
       />
 
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
@@ -173,5 +166,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;
