@@ -4,7 +4,6 @@ import { JournalEntry } from '../types';
 import { storageManager } from '../utils/storage';
 
 export function useEntries(currentDate: Date, storageReady: boolean) {
-  console.log('[DEBUG] useEntries: called', { date: format(currentDate, 'yyyy-MM-dd'), storageReady });
   const [dailyEntries, setDailyEntries] = useState<JournalEntry[]>([]);
   const [carryOverEntries, setCarryOverEntries] = useState<JournalEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -13,13 +12,11 @@ export function useEntries(currentDate: Date, storageReady: boolean) {
 
   const loadAllData = useCallback(async () => {
     if (!storageReady) {
-      console.log('[DEBUG] useEntries: storage not ready, skipping load');
       setLoading(false);
       return;
     }
 
     try {
-      console.log('[DEBUG] useEntries: starting data load for', dateString);
       setLoading(true);
       // Reset entries to prevent stale data display while loading
       setDailyEntries([]);
@@ -87,13 +84,11 @@ export function useEntries(currentDate: Date, storageReady: boolean) {
       // Filter out migrated entries from daily view
       const activeDailyEntries = combinedDailyEntries.filter(entry => entry.status !== 'migrated');
 
-      console.log('[DEBUG] useEntries: setting state', { daily: activeDailyEntries.length, carryOver: allCarryOverEntries.length });
       setDailyEntries(activeDailyEntries.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()));
       setCarryOverEntries(allCarryOverEntries.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()));
 
       // console.log('[Performance] Data load complete', performance.now() - start, 'ms');
     } catch (error) {
-      console.error('[DEBUG] Error loading entries:', error);
       console.error('Error loading entries:', error);
     } finally {
       setLoading(false);
