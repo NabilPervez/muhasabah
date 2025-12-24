@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Heart, Plus } from 'lucide-react';
 import { JournalEntry } from '../types';
 
@@ -13,7 +13,7 @@ export function GratitudeSection({ entries, onAddEntry, onUpdateEntry, onDeleteE
   const [gratitudeText, setGratitudeText] = useState('');
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const gratitudeEntries = entries.filter(entry => entry.type === 'gratitude');
+  const gratitudeEntries = useMemo(() => entries.filter(entry => entry.type === 'gratitude'), [entries]);
 
   useEffect(() => {
     if (gratitudeEntries.length > 0) {

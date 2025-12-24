@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Moon, Plus } from 'lucide-react';
 import { JournalEntry } from '../types';
 
@@ -13,7 +13,7 @@ export function EveningJournal({ entries, onAddEntry, onUpdateEntry, onDeleteEnt
   const [journalText, setJournalText] = useState('');
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const eveningEntries = entries.filter(entry => entry.type === 'eveningJournal');
+  const eveningEntries = useMemo(() => entries.filter(entry => entry.type === 'eveningJournal'), [entries]);
 
   useEffect(() => {
     if (eveningEntries.length > 0) {
