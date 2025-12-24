@@ -16,6 +16,7 @@ import { getInspirationByDate } from './utils/inspirations';
 import { AppSettings } from './types';
 
 function App() {
+  console.log('[DEBUG] App: render start');
   const [currentDate, setCurrentDate] = useState(new Date());
   const [showSettings, setShowSettings] = useState(false);
   const [storageReady, setStorageReady] = useState(false);
@@ -25,7 +26,11 @@ function App() {
     notifications: true
   });
 
+
+
+  console.log('[DEBUG] App: calling useEntries', { currentDate, storageReady });
   const { dailyEntries, carryOverEntries, loading, addEntry, updateEntry, deleteEntry, migrateTask } = useEntries(currentDate, storageReady);
+  console.log('[DEBUG] App: useEntries returned', { dailyEntriesCount: dailyEntries.length, loading });
   const inspiration = getInspirationByDate(currentDate);
 
   // Filter entries for different components
@@ -34,10 +39,13 @@ function App() {
   const actualGoals = carryOverEntries.filter(entry => entry.type === 'goal');
 
   useEffect(() => {
+    console.log('[DEBUG] App: init effect running');
     // Initialize storage and PWA
     const initApp = async () => {
       try {
+        console.log('[DEBUG] App: calling storageManager.init()');
         await storageManager.init();
+        console.log('[DEBUG] App: storageManager.init() complete, setting storageReady=true');
         setStorageReady(true);
 
         // Register service worker for PWA
@@ -51,6 +59,7 @@ function App() {
             });
         }
       } catch (error) {
+        console.error('[DEBUG] Failed to initialize app:', error);
         console.error('Failed to initialize app:', error);
       }
     };
@@ -78,6 +87,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 transition-colors pb-12">
+      {console.log('[DEBUG] App: rendering JSX')}
       <Header
         currentDate={currentDate}
         onDateChange={setCurrentDate}

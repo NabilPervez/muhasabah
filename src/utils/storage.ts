@@ -11,11 +11,16 @@ class StorageManager {
   private db: IDBDatabase | null = null;
 
   async init(): Promise<void> {
+    console.log('[DEBUG] StorageManager: init called');
     return new Promise((resolve, reject) => {
       const request = indexedDB.open(DB_NAME, DB_VERSION);
 
-      request.onerror = () => reject(request.error);
+      request.onerror = () => {
+        console.error('[DEBUG] StorageManager: init error', request.error);
+        reject(request.error);
+      };
       request.onsuccess = () => {
+        console.log('[DEBUG] StorageManager: init success');
         this.db = request.result;
         resolve();
       };
