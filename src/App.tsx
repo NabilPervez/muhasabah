@@ -97,6 +97,7 @@ function App() {
         {/* Your Morning Plan - Side-by-Side */}
         <div className="grid gap-6 lg:grid-cols-2">
           <MorningJournal
+            key={currentDate.toISOString()}
             entries={dailyEntries}
             onAddEntry={addEntry}
             onUpdateEntry={updateEntry}
@@ -133,6 +134,7 @@ function App() {
         {/* Your Evening Wind-Down - Side-by-Side */}
         <div className="grid gap-6 lg:grid-cols-2">
           <GratitudeSection
+            key={currentDate.toISOString()}
             entries={dailyEntries}
             onAddEntry={addEntry}
             onUpdateEntry={updateEntry}
@@ -140,6 +142,7 @@ function App() {
           />
 
           <EveningJournal
+            key={currentDate.toISOString()}
             entries={dailyEntries}
             onAddEntry={addEntry}
             onUpdateEntry={updateEntry}

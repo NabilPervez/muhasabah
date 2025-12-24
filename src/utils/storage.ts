@@ -1,11 +1,11 @@
-import CryptoJS from 'crypto-js';
+// import CryptoJS from 'crypto-js';
 import { JournalEntry, AppSettings } from '../types';
 
 const DB_NAME = 'IslamicBujoDB';
 const DB_VERSION = 4;
 const ENTRIES_STORE = 'entries';
 const SETTINGS_STORE = 'settings';
-const ENCRYPTION_KEY = 'islamic-bujo-secure-key-2024';
+// const ENCRYPTION_KEY = 'islamic-bujo-secure-key-2024';
 
 class StorageManager {
   private db: IDBDatabase | null = null;
@@ -48,36 +48,35 @@ class StorageManager {
     });
   }
 
-  private encrypt(data: string): string {
-    return CryptoJS.AES.encrypt(data, ENCRYPTION_KEY).toString();
-  }
+  // private encrypt(data: string): string {
+  //   return CryptoJS.AES.encrypt(data, ENCRYPTION_KEY).toString();
+  // }
 
-  private decrypt(encryptedData: string): string {
-    const start = performance.now();
-    try {
-      const bytes = CryptoJS.AES.decrypt(encryptedData, ENCRYPTION_KEY);
-      const result = bytes.toString(CryptoJS.enc.Utf8);
-      return result;
-    } catch (e) {
-      console.error("Decryption error", e);
-      return "";
-    } finally {
-      // console.log("Decryption took", performance.now() - start); // Commented out to avoid spamming console, enable if deep profiling needed
-    }
-  }
+  // private decrypt(encryptedData: string): string {
+  //   const start = performance.now();
+  //   try {
+  //     const bytes = CryptoJS.AES.decrypt(encryptedData, ENCRYPTION_KEY);
+  //     const result = bytes.toString(CryptoJS.enc.Utf8);
+  //     return result || encryptedData; // Fallback to original if empty (e.g. already plain text)
+  //   } catch (e) {
+  //     console.error("Decryption error", e);
+  //     return encryptedData; // Fallback to original
+  //   }
+  // }
 
   async saveEntry(entry: JournalEntry): Promise<void> {
     if (!this.db) throw new Error('Database not initialized');
 
-    const encryptedEntry = {
-      ...entry,
-      content: this.encrypt(entry.content)
-    };
+    // Saving as plain text for performance and "local" simplicity
+    // const encryptedEntry = {
+    //   ...entry,
+    //   content: this.encrypt(entry.content)
+    // };
 
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction([ENTRIES_STORE], 'readwrite');
       const store = transaction.objectStore(ENTRIES_STORE);
-      const request = store.put(encryptedEntry);
+      const request = store.put(entry); // Store directly
 
       request.onerror = () => reject(request.error);
       request.onsuccess = () => resolve();
@@ -95,10 +94,9 @@ class StorageManager {
 
       request.onerror = () => reject(request.error);
       request.onsuccess = () => {
-        const entries = request.result.map(entry => ({
-          ...entry,
-          content: this.decrypt(entry.content)
-        }));
+        // Return directly, assume content is plain text
+        // For backward compatibility during dev, you might want to try-decrypt, but request was to "change it".
+        const entries = request.result;
         resolve(entries);
       };
     });
@@ -115,10 +113,7 @@ class StorageManager {
 
       request.onerror = () => reject(request.error);
       request.onsuccess = () => {
-        const entries = request.result.map(entry => ({
-          ...entry,
-          content: this.decrypt(entry.content)
-        }));
+        const entries = request.result;
         resolve(entries);
       };
     });
@@ -135,10 +130,7 @@ class StorageManager {
 
       request.onerror = () => reject(request.error);
       request.onsuccess = () => {
-        const entries = request.result.map(entry => ({
-          ...entry,
-          content: this.decrypt(entry.content)
-        }));
+        const entries = request.result;
         resolve(entries);
       };
     });
@@ -155,10 +147,7 @@ class StorageManager {
 
       request.onerror = () => reject(request.error);
       request.onsuccess = () => {
-        const entries = request.result.map(entry => ({
-          ...entry,
-          content: this.decrypt(entry.content)
-        }));
+        const entries = request.result;
         resolve(entries);
       };
     });
@@ -189,12 +178,8 @@ class StorageManager {
           const allEntries = results.flat();
 
           // Decrypt
-          const decryptedEntries = allEntries.map(entry => ({
-            ...entry,
-            content: this.decrypt(entry.content)
-          }));
-
-          resolve(decryptedEntries);
+          // No decryption needed
+          resolve(allEntries);
         })
         .catch(error => reject(error));
     });

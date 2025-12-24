@@ -1,6 +1,6 @@
 import React from 'react';
 import { format } from 'date-fns';
-import { ChevronLeft, ChevronRight, Calendar, Zap } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
 
 interface HeaderProps {
   currentDate: Date;
@@ -34,15 +34,11 @@ export function Header({ currentDate, onDateChange }: HeaderProps) {
       <div className="grid grid-cols-3 items-center max-w-4xl mx-auto">
         {/* Branding - Left */}
         <div className="flex items-center justify-start">
-          <div className="flex items-center gap-2">
-            <div className="bg-gradient-to-tr from-cyan-500 to-blue-600 text-white p-1.5 rounded-lg shadow-md">
-              <Zap className="w-5 h-5 fill-current" />
-            </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent hidden sm:block">
-              Baraka Boost
-            </span>
-          </div>
+          <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent hidden sm:block">
+            Baraka Boost
+          </span>
         </div>
+
 
         {/* Date Selector - Center */}
         <div className="flex items-center justify-center space-x-2 w-full">
@@ -67,7 +63,8 @@ export function Header({ currentDate, onDateChange }: HeaderProps) {
 
           <button
             onClick={goToNextDay}
-            className="p-1.5 rounded-full hover:bg-gray-100 text-gray-500 transition-colors"
+            disabled={isToday}
+            className={`p-1.5 rounded-full transition-colors ${isToday ? 'opacity-30 cursor-not-allowed' : 'hover:bg-gray-100 text-gray-500'}`}
             aria-label="Next day"
           >
             <ChevronRight className="w-5 h-5" />
@@ -88,6 +85,6 @@ export function Header({ currentDate, onDateChange }: HeaderProps) {
           )}
         </div>
       </div>
-    </header>
+    </header >
   );
 }
