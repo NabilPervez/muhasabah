@@ -34,9 +34,6 @@ export function Header({ currentDate, onDateChange }: HeaderProps) {
       <div className="grid grid-cols-3 items-center max-w-4xl mx-auto">
         {/* Branding - Left */}
         <div className="flex items-center justify-start">
-          <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent hidden sm:block">
-            Baraka Boost
-          </span>
         </div>
 
 
