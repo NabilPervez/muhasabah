@@ -16,10 +16,12 @@ export function GratitudeSection({ entries, onAddEntry, onUpdateEntry, onDeleteE
   const gratitudeEntries = entries.filter(entry => entry.type === 'gratitude');
 
   useEffect(() => {
-    if (gratitudeEntries.length > 0 && gratitudeText === '') {
+    if (gratitudeEntries.length > 0) {
       setGratitudeText(gratitudeEntries[0].content);
+    } else {
+      setGratitudeText('');
     }
-  }, [gratitudeEntries, gratitudeText]);
+  }, [gratitudeEntries]);
 
   const handleSubmit = () => {
     if (gratitudeText.trim()) {

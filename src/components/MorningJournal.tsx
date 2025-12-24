@@ -16,10 +16,12 @@ export function MorningJournal({ entries, onAddEntry, onUpdateEntry, onDeleteEnt
   const morningEntries = entries.filter(entry => entry.type === 'morningJournal');
 
   useEffect(() => {
-    if (morningEntries.length > 0 && journalText === '') {
+    if (morningEntries.length > 0) {
       setJournalText(morningEntries[0].content);
+    } else {
+      setJournalText('');
     }
-  }, [morningEntries, journalText]);
+  }, [morningEntries]);
 
   const handleSubmit = () => {
     if (journalText.trim()) {

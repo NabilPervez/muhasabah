@@ -19,6 +19,10 @@ export function useEntries(currentDate: Date, storageReady: boolean) {
     try {
       // console.log('[Performance] Starting data load', new Date().toISOString());
       setLoading(true);
+      // Reset entries to prevent stale data display while loading
+      setDailyEntries([]);
+      // Carry over entries might be preserved or reset depending on preference, but daily entries should be clear
+
       // const start = performance.now();
 
       const [
